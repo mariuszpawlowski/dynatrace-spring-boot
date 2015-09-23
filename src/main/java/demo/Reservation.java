@@ -35,8 +35,7 @@ public class Reservation {
 		builder.append("id=" + id);
 		builder.append(",reservationName='" + reservationName).append("\'");
 		builder.append("}");
-		
-		return super.toString();
+		return builder.toString();
 	}
 	
 	
