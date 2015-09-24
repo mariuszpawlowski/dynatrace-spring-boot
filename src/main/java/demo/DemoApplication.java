@@ -12,6 +12,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +39,19 @@ public class DemoApplication {
 		};
 	}
 
+	@Controller
+	public static class ReservationMvcController{
+
+		@RequestMapping("/page")
+		String page(Model model){
+			model.addAttribute("reservations", this.reservationRepository.findAll());
+			return "2";
+		}
+
+		@Autowired
+		ReservationRepository reservationRepository;
+	}
+
 	@RestController
 	public static class ReservationRestController{
 
@@ -47,7 +62,7 @@ public class DemoApplication {
 		Collection<Reservation> reservations(){
 			return this.reservationRepository.findAll();
 		}
-	} 
+	}
 
 	@Named
 	@ApplicationPath("/jersey")
