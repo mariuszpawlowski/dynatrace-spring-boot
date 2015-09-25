@@ -26,7 +26,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.http.MediaType;
 import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.stereotype.Controller;
@@ -62,22 +61,22 @@ public class DemoApplication {
 		@RequestMapping("/page")
 		String page(Model model) {
 			model.addAttribute("reservations", this.reservationRepository.findAll());
-			return "2";
+			return "reservations";
 		}
 
 		@Autowired
 		ReservationRepository reservationRepository;
 	}
-	
+
 	@Service
 	public static class ReservationService {
-		
+
 		@Autowired
 		private ReservationRepository reservationRepository;
-		
+
 		@CacheResult
-		public Collection<Reservation> getReservations() throws InterruptedException{
-			Thread.sleep(1000*5);
+		public Collection<Reservation> getReservations() throws InterruptedException {
+			Thread.sleep(1000 * 5);
 			return this.reservationRepository.findAll();
 		}
 	}
@@ -109,9 +108,9 @@ public class DemoApplication {
 
 		@Inject
 		private ReservationRepository reservationRepository;
-		
-		@Inject 
-		private ReservationService reservationService; 
+
+		@Inject
+		private ReservationService reservationService;
 
 		@GET
 		@Produces(MediaType.APPLICATION_JSON_VALUE)
@@ -138,16 +137,16 @@ public class DemoApplication {
 		}
 
 	}
-	
+
 	@Bean
-	HealthIndicator healthIndicator () {
-			return () -> Health.status("Status OK").build();		 
+	HealthIndicator healthIndicator() {
+		return () -> Health.status("Status OK").build();
 	}
-	
+
 	@Bean
 	@ExportMetricWriter
 	@ConditionalOnProperty("spring.jmx.enabled")
-	MetricWriter metricWriter (@Qualifier("mbeanExporter") MBeanExporter exporter){
+	MetricWriter metricWriter(@Qualifier("mbeanExporter") MBeanExporter exporter) {
 		return new JmxMetricWriter(exporter);
 	}
 
